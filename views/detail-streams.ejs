@@ -1,0 +1,10 @@
+<div class="detailStreams" ng-show="detailIfShow" ng-controller="DetailController as detail">
+    <ul class="functions">
+        <li ng-click="detail.back()">back</li>
+        <li ng-repeat="func    in functions">
+           {{func}}
+        </li>
+    </ul>
+    <div id="remoteVideosContainer"></div>
+
+</div>

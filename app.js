@@ -1,5 +1,7 @@
 /**
  * Module dependencies.
+ * 源码分析
+ * https://blog.csdn.net/qq_21358401/article/details/78943538
  */
 var express = require('express')
 ,	path = require('path')
@@ -36,6 +38,7 @@ var server = app.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
+// 监听服务
 var io = require('socket.io').listen(server);
 /**
  * Socket.io event handling

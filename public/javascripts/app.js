@@ -1,7 +1,8 @@
 (function(){
-	var app = angular.module('projectRtc', [],
+	var app = angular.module('projectRtc', ['ngRoute'],
 		function($locationProvider){$locationProvider.html5Mode(true);}
     );
+
 	var client = new PeerManager();
 	var mediaConfig = {
         audio:true,
@@ -10,6 +11,7 @@
 			optional: []
         }
     };
+
 
     app.factory('camera', ['$rootScope', '$window', function($rootScope, $window){
     	var camera = {};
@@ -45,14 +47,18 @@
 		return camera;
     }]);
 
-	app.controller('RemoteStreamsController', ['camera', '$location', '$http', function(camera, $location, $http){
+	app.controller('RemoteStreamsController', ['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
+		$scope.remoteStreamsIfShow = true;
+
 		var rtc = this;
 		rtc.remoteStreams = [];
+
 		function getStreamById(id) {
 		    for(var i=0; i<rtc.remoteStreams.length;i++) {
 		    	if (rtc.remoteStreams[i].id === id) {return rtc.remoteStreams[i];}
 		    }
 		}
+
 		rtc.loadData = function () {
 			// get list of streams from the server
 			$http.get('/streams.json').success(function(data){
@@ -70,10 +76,15 @@
 			});
 		};
 
+        $rootScope.$on("back", function (event, msg) {
+            $scope.remoteStreamsIfShow = true;
+        })
+
 		rtc.view = function(stream){
-			client.peerInit(stream.id);
-			stream.isPlaying = !stream.isPlaying;
+			$scope.remoteStreamsIfShow = false;
+			$rootScope.$broadcast("view",stream);
 		};
+
 		rtc.call = function(stream){
 			/* If json isn't loaded yet, construct a new stream 
 			 * This happens when you load <serverUrl>/<socketId> : 
@@ -114,6 +125,27 @@
       		rtc.call($location.url().slice(1));
     	};
 	}]);
+
+	app.controller('DetailController',['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
+		var detail = this;
+
+		$scope.detailIfShow = false;
+		$rootScope.$on("view", function (event, stream) {
+			$scope.detailIfShow = true;
+			detail.viewStream(stream)
+        })
+
+		detail.viewStream = function (stream) {
+            client.peerInit(stream.id);
+            stream.isPlaying = !stream.isPlaying;
+            $scope.functions = ['Screen','GPS', 'Camera'];
+        }
+
+        detail.back = function () {
+            $scope.detailIfShow = false;
+            $rootScope.$broadcast("back","back to remote-streams.ejs");
+        }
+    }]);
 
 	app.controller('LocalStreamController',['camera', '$scope', '$window', function(camera, $scope, $window){
 		var localStream = this;
