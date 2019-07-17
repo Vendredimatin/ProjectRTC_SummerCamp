@@ -48,6 +48,8 @@
     }]);
 
 	app.controller('RemoteStreamsController', ['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
+
+
 		$scope.remoteStreamsIfShow = true;
 
 		var rtc = this;
@@ -128,10 +130,17 @@
 
 	app.controller('DetailController',['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
 		var detail = this;
+		var remoteStream;
 
 		$scope.detailIfShow = false;
 		$rootScope.$on("view", function (event, stream) {
+			remoteStream = stream;
+
+
 			$scope.detailIfShow = true;
+            console.log("client.id", client.getId());
+            console.log("stream.id",stream.id);
+            console.log(event);
 			detail.viewStream(stream)
         })
 
@@ -139,11 +148,20 @@
             client.peerInit(stream.id);
             stream.isPlaying = !stream.isPlaying;
             $scope.functions = ['Screen','GPS', 'Camera'];
+            client.createDataChannel(remoteStream.id);
         }
 
         detail.back = function () {
             $scope.detailIfShow = false;
             $rootScope.$broadcast("back","back to remote-streams.ejs");
+        }
+
+        detail.sendData = function () {
+			var textArea = document.getElementById("sendInfo");
+			var info = textArea.value;
+
+
+			client.sendDataByChannel(info);
         }
     }]);
 

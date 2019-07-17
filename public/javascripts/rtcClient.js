@@ -18,12 +18,13 @@ var PeerManager = (function () {
       localStream,
       remoteVideoContainer = document.getElementById('remoteVideosContainer'),
       socket = io();
-      
+
   socket.on('message', handleMessage);
   socket.on('id', function(id) {
     localId = id;
   });
-      
+
+
   function addPeer(remoteId) {
     var peer = new Peer(config.peerConnectionConfig, config.peerConnectionConstraints);
     peer.pc.onicecandidate = function(event) {
@@ -54,7 +55,10 @@ var PeerManager = (function () {
       }
     };
     peerDatabase[remoteId] = peer;
-        
+    console.log("remoteID",remoteId);
+    console.log("PeerDatabase");
+    console.log(peerDatabase);
+
     return peer;
   }
   function answer(remoteId) {
@@ -125,6 +129,47 @@ var PeerManager = (function () {
     console.log(err);
   }
 
+  var dataChannel;
+  function createDataChannel(remoteId) {
+
+      var dataChannelOptions = {
+          ordered: false, //不保证到达顺序
+          maxRetransmitTime: 3000, //最大重传时间
+      };
+
+      var peerConnection = peerDatabase[remoteId].pc;
+      dataChannel =  peerConnection.createDataChannel(remoteId+".dataChannel", dataChannelOptions);
+
+      dataChannel.onerror = function (error) {
+          console.log("Data Channel Error:", error);
+      };
+
+      dataChannel.onmessage = function (event) {
+          console.log("Got Data Channel Message:", event.data);
+      };
+
+      dataChannel.onopen = function () {
+          console.log("open event "+ dataChannel.readyState);
+          console.log("label:"+dataChannel.label);
+          console.log("id:"+dataChannel.id);
+      };
+
+      dataChannel.onclose = function () {
+          console.log("close event "+ dataChannel.readyState);
+      };
+
+      console.log("dataChannel 已建立");
+  }
+
+  function sendData(data) {
+      if (dataChannel.readyState != "open"){
+          console.log("dataChannel:" + dataChannel.readyState);
+          return;
+      }
+      var res = dataChannel.send(data);
+      console.log("data已发送");
+  }
+
   return {
     getId: function() {
       return localId;
@@ -162,6 +207,14 @@ var PeerManager = (function () {
 
     send: function(type, payload) {
       socket.emit(type, payload);
+    },
+
+    createDataChannel: function (remoteId) {
+      createDataChannel(remoteId);
+    },
+
+    sendDataByChannel: function (data) {
+        sendData(data);
     }
   };
   
