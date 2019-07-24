@@ -1,4 +1,4 @@
-var PeerManager_liu = (function () {
+var PeerManager = (function () {
 
     var localId,
         config = {

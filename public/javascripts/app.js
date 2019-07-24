@@ -88,7 +88,7 @@
         })
 
         rtc.view = function(stream){
-            console.log('hi')
+            console.log('hi');
             $scope.remoteStreamsIfShow = false;
             $rootScope.$broadcast("view",stream);
         };
@@ -154,7 +154,6 @@
             client.peerInit(stream.id);
             stream.isPlaying = !stream.isPlaying;
             $scope.functions = ['Screen','GPS', 'Camera'];
-            client.createDataChannel(remoteStream.id);
         }
 
         detail.back = function () {
@@ -167,8 +166,8 @@
             var textArea = document.getElementById("sendInfo");
             var info = textArea.value;
 
-            client.sendDataByChannel(info);
-            //client.sendData(info, remoteStream.id);
+            //client.sendDataByChannel(info);
+            client.sendData(info, remoteStream.id);
         }
     }]);
 
@@ -209,7 +208,7 @@
     
     app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window',function ($location, $http, $scope, $rootScope, $window) {
         $window.onload = function () {
-            
+            console.log(client.getGPS(remoteId));
             var map = new BMap.Map("allmap");
             var point = new BMap.Point(116.404, 39.915);
             map.centerAndZoom(point, 15);
