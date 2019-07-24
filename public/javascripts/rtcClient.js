@@ -37,6 +37,8 @@ var PeerManager = (function () {
             }
         };
         peer.pc.onaddstream = function(event) {
+            console.log(event);
+            console.log(event.stream);
             attachMediaStream(peer.remoteVideoEl, event.stream);
             remoteVideosContainer.appendChild(peer.remoteVideoEl);
         };
@@ -61,6 +63,7 @@ var PeerManager = (function () {
 
         return peer;
     }
+
     function answer(remoteId) {
         var pc = peerDatabase[remoteId].pc;
         pc.createAnswer(

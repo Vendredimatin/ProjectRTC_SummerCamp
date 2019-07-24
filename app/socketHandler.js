@@ -19,7 +19,7 @@ module.exports = function(io, streams) {
         otherClient.emit('message', details);
     });
 
-    // 监听消息，名字可以自命名，根据客户端的id和options的name闯将一个新流
+    // 监听消息，名字可以自命名，根据客户端的id和options的name创建一个新流
     client.on('readyToStream', function(options) {
       console.log('-- ' + client.id + ' is ready to stream --');
       
