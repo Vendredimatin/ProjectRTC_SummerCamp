@@ -1,10 +1,11 @@
 body {
-  padding: 30px;
+    padding: 0;
+    margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00b7ff;
+  color: black;
   text-decoration: none;
 }
 
@@ -14,14 +15,20 @@ li {
 /*table, tr, td, th {margin: 0;border: 0;padding: 5px;border-collapse: collapse;}*/
 
 table {
-    width: 880px;
-    margin: 15px 20px 20px 20px;
-    border-top: 1px solid #EFD3D2;
+    width: 100%;
+    /*margin: 15px 20px 20px 20px;*/
+    max-height: 500px;
+    border: 3px solid #4e555b;
     border-spacing: 0px;
-    color: #B06A68;
+    color: black;
+    text-align: center;
+    overflow: scroll;
+}
+table th{
+    font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 table thead tr td,table tbody tr td {
-    border-bottom: 1px solid #EFD3D2;
+    /*border-bottom: 3px solid #4e555b;*/
     padding: 10px 20px;
 }
 table thead tr td {
@@ -31,10 +38,13 @@ table tbody tr:nth-child(even) {
     background: #EFD3D2;
 }
 
-
-
+.grid{
+    height: 500px;
+    margin: 20px 20px 20px 20px;
+}
 
 .refresh {
+    margin-top: 30px;
     list-style-type: none;
     border: 2px solid black;
     border-radius: 5px;
@@ -71,6 +81,23 @@ table tbody tr:nth-child(even) {
   left: 50%;
   top: 50%;
   transform:translate(-50%,-50%);
+}
+
+.header{
+    background: #696969;
+    width: 100%;
+    height: 100px;
+}
+
+.main-panel{
+    margin: 0px 40px 40px 40px;
+    height:650px;
+    background: #e9ecef ;
+}
+
+.remoteStreams{
+    margin: 30px;
+    padding: 30px;
 }
 
 .remoteStreams td:hover {

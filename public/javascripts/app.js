@@ -1,5 +1,5 @@
 (function(){
-    var app = angular.module('projectRtc', ['ngRoute'],
+    var app = angular.module('projectRtc', ['ngRoute', 'ngMaterial', 'ngMessages'],
         function($locationProvider){$locationProvider.html5Mode(true);}
     );
 
@@ -12,6 +12,15 @@
         }
     };
 
+    app.config(function ($routeProvider) {
+       $routeProvider.when(
+           '/', {templateUrl: 'htmls/home.html'}
+       ).when(
+           '/view', {templateUrl: 'htmls/stream-view.html'}
+       ).when(
+           '/gps', {templateUrl: 'htmls/stream-gps.html'}
+       )
+    });
 
     app.factory('camera', ['$rootScope', '$window', function($rootScope, $window){
         var camera = {};
@@ -48,10 +57,6 @@
     }]);
 
     app.controller('RemoteStreamsController', ['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
-
-
-        $scope.remoteStreamsIfShow = true;
-
         var rtc = this;
         rtc.remoteStreams = [];
 
@@ -83,6 +88,7 @@
         })
 
         rtc.view = function(stream){
+            console.log('hi')
             $scope.remoteStreamsIfShow = false;
             $rootScope.$broadcast("view",stream);
         };
@@ -200,4 +206,18 @@
             }
         };
     }]);
+    
+    app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window',function ($location, $http, $scope, $rootScope, $window) {
+        $window.onload = function () {
+            
+            var map = new BMap.Map("allmap");
+            var point = new BMap.Point(116.404, 39.915);
+            map.centerAndZoom(point, 15);
+            function addMarker(point){
+                var marker = new BMap.Marker(point);
+                map.addOverlay(marker);
+            }
+            addMarker(point)
+        }
+    }])
 })();

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<div style="padding: 0; margin: 0; width: 100%;height: 100%">
+    <div class="header">
+
+    </div>
+    <div style="margin-left: 40px;">
+        <h2>Remote Streams</h2>
+    </div>
+    <div class="main-panel">
+        <div class="remoteStreams" ng-controller="RemoteStreamsController as rtc">
+            <table class="mt">
+                <thead>
+                <tr>
+                    <th>id</th><th>Stream</th><th>1-way</th><th>2-way</th><th>3-way</th><th>4-way</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="stream in rtc.remoteStreams" ng-class="{'selected' : stream.isPlaying}">
+                    <td><a>{{stream.id}}</a></td>
+                    <td><a>{{stream.name}}</a></td>
+                    <!--<td ng-click="rtc.view(stream)"><a>View</a></td>-->
+                    <!--<td ng-click="rtc.call(stream)"><a>Call</a></td>-->
+                    <td><a href="view">View</a></td>
+                    <td><a href="call">Call</a></td>
+                    <td><a href="gps">GPS</a></td>
+                    <td><a href="fingerprint">FingerPrint</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <!--<div ui-grid="gridOptions" class="grid"></div>-->
+            <div class="refresh" ng-click="rtc.loadData()" style="width: 30%">
+                <a href>Refresh</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
