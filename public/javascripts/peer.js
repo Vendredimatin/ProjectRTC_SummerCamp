@@ -1,43 +1,49 @@
 class Peer_liu{
-    constructor(pcConfig, pcConstraints, remoteId){
+    constructor(pcConfig, pcConstraints, remoteId, socketUtil){
+        console.log("peer_liu constructor");
         this.remoteVideoEl = document.createElement('video');
         this.remoteVideoEl.controls = true;
         this.remoteVideoEl.autoplay = true;
-        this.pc = new RTCPeerConnection(pcConfig, pcConstraints);
-        this.dataChannel = this.createDataChannel();
         this.remoteId = remoteId;
+        this.pc = this.createPeerConnection(pcConfig,pcConstraints, socketUtil, remoteId, this.remoteVideoEl);
+        this.dataChannel = this.createDataChannel();
+
     }
 
-  /*  createPeerConnection(pcConfig, pcConstraints){
-        peer.pc.onicecandidate = function(event) {
+    createPeerConnection(pcConfig, pcConstraints, socketUtil, remoteId, remoteVideoEl){
+        console.log("createPeerConnection");
+        let pc = new RTCPeerConnection(pcConfig, pcConstraints);
+        pc.onicecandidate = function(event) {
             if (event.candidate) {
-                send('candidate', remoteId, {
+                socketUtil.send('candidate', remoteId, {
                     label: event.candidate.sdpMLineIndex,
                     id: event.candidate.sdpMid,
                     candidate: event.candidate.candidate
                 });
             }
         };
-        peer.pc.onaddstream = function(event) {
-            //stream 来自rtc.loadData();
-            attachMediaStream(peer.remoteVideoEl, event.stream);
-            remoteVideosContainer.appendChild(peer.remoteVideoEl);
+        pc.onaddstream = function(event) {
+            //stream 来自rtc.loadData
+            attachMediaStream(remoteVideoEl, event.stream);
+           // remoteVideosContainer.appendChild(remoteVideoEl);
         };
-        peer.pc.onremovestream = function(event) {
-            peer.remoteVideoEl.src = '';
-            remoteVideosContainer.removeChild(peer.remoteVideoEl);
+        pc.onremovestream = function(event) {
+            remoteVideoEl.src = '';
+           // remoteVideosContainer.removeChild(remoteVideoEl);
         };
-        peer.pc.oniceconnectionstatechange = function(event) {
+        pc.oniceconnectionstatechange = function(event) {
             switch(
                 (  event.srcElement // Chrome
                     || event.target   ) // Firefox
                     .iceConnectionState) {
                 case 'disconnected':
-                    remoteVideosContainer.removeChild(peer.remoteVideoEl);
+             ///       remoteVideosContainer.removeChild(remoteVideoEl);
                     break;
             }
         };
-    }*/
+
+        return pc;
+    }
 
     createDataChannel() {
         var dataChannelOptions = {
@@ -53,9 +59,9 @@ class Peer_liu{
             console.log("Data Channel Error:", error);
         };
 
-        dataChannel.onmessage = function (event) {
-            console.log("Got Data Channel Message:", event.data);
-        };
+        dataChannel.onmessage = this.onMessageHandler;  /*function (event) {
+
+        };*/
 
         dataChannel.onopen = function () {
             console.log("open event "+ dataChannel.readyState);
@@ -67,6 +73,16 @@ class Peer_liu{
         };
 
         return dataChannel;
+    }
+
+    onMessageHandler(event){
+        const DATA_GPS = "GPS";
+        console.log("Got Data Channel Message:", event.data);
+        var data = JSON.parse(event.data);
+        if (data['type'] == DATA_GPS){
+            this.latitude = data['latitude'];
+            this.longitude = data['longitude'];
+        }
     }
 
     getChannelState() {

@@ -16,8 +16,8 @@ var PeerManager = (function () {
         },
         peerMap = {},
         localStream,
-        //remoteVideosContainer = document.getElementById('remoteVideosContainer'),
-        socket = io();
+        socketUtil = new SocketUtil(),
+        socket = socketUtil.getSocket();
 
     socket.on('message', handleMessage);
     socket.on('id', function(id) {
@@ -25,43 +25,9 @@ var PeerManager = (function () {
     });
 
     function addPeer(remoteId) {
-        var peer = new Peer_liu(config.peerConnectionConfig, config.peerConnectionConstraints, remoteId);
-        peer.pc.onicecandidate = function(event) {
-            if (event.candidate) {
-                send('candidate', remoteId, {
-                    label: event.candidate.sdpMLineIndex,
-                    id: event.candidate.sdpMid,
-                    candidate: event.candidate.candidate
-                });
-            }
-        };
-        peer.pc.onaddstream = function(event) {
-            //stream 来自rtc.loadData
-            console.log("!!!!");
-            attachMediaStream(peer.remoteVideoEl, event.stream);
-            remoteVideosContainer.appendChild(peer.remoteVideoEl);
-            console.log(remoteVideosContainer);
-        };
-        peer.pc.onremovestream = function(event) {
-            peer.remoteVideoEl.src = '';
-            remoteVideosContainer.removeChild(peer.remoteVideoEl);
-        };
-        peer.pc.oniceconnectionstatechange = function(event) {
-            switch(
-                (  event.srcElement // Chrome
-                    || event.target   ) // Firefox
-                    .iceConnectionState) {
-                case 'disconnected':
-                    remoteVideosContainer.removeChild(peer.remoteVideoEl);
-                    break;
-            }
-        };
-
+        console.log("addPeer");
+        var peer = new Peer_liu(config.peerConnectionConfig, config.peerConnectionConstraints, remoteId, socketUtil);
         peerMap[remoteId] = peer;
-        console.log("remoteID",remoteId);
-        console.log("peerMap");
-        console.log(peerMap);
-
         return peer;
     }
     function answer(remoteId) {
@@ -69,7 +35,7 @@ var PeerManager = (function () {
         pc.createAnswer(
             function(sessionDescription) {
                 pc.setLocalDescription(sessionDescription);
-                send('answer', remoteId, sessionDescription);
+                socketUtil.send('answer', remoteId, sessionDescription);
             },
             error
         );
@@ -79,7 +45,7 @@ var PeerManager = (function () {
         pc.createOffer(
             function(sessionDescription) {
                 pc.setLocalDescription(sessionDescription);
-                send('offer', remoteId, sessionDescription);
+                socketUtil.send('offer', remoteId, sessionDescription);
             },
             error
         );
@@ -114,15 +80,7 @@ var PeerManager = (function () {
                 break;
         }
     }
-    function send(type, to, payload) {
-        console.log('sending ' + type + ' to ' + to);
 
-        socket.emit('message', {
-            to: to,
-            type: type,
-            payload: payload
-        });
-    }
     function toggleLocalStream(pc) {
         if(localStream) {
             (!!pc.getLocalStreams().length) ? pc.removeStream(localStream) : pc.addStream(localStream);
@@ -169,8 +127,9 @@ var PeerManager = (function () {
         },
 
         peerInit: function(remoteId) {
+            console.log("peerInit",remoteId);
             peer = peerMap[remoteId] || addPeer(remoteId);
-            send('init', remoteId, null);
+            socketUtil.send('init', remoteId, null);
         },
 
         peerRenegociate: function(remoteId) {
@@ -186,7 +145,14 @@ var PeerManager = (function () {
         },
 
         getGPS: function (remoteId) {
-            return sendDataByChannel("GPS", remoteId);
+            sendDataByChannel("GPS", remoteId);
+            let peer = this.getPeer(remoteId);
+            let position = {"longitude":peer.dataChannel.longitude, "latitude":peer.dataChannel.latitude};
+            return position;
+            },
+
+        getPeer: function (remoteId) {
+            return peerMap[remoteId];
         }
     };
 
