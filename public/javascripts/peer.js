@@ -1,4 +1,4 @@
-class Peer_liu{
+class Peer{
     constructor(pcConfig, pcConstraints, remoteId, socketUtil){
         console.log("peer_liu constructor");
         this.remoteVideoEl = document.createElement('video');

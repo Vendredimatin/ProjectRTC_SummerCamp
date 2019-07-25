@@ -26,7 +26,7 @@ var PeerManager = (function () {
 
     function addPeer(remoteId) {
         console.log("addPeer");
-        var peer = new Peer_liu(config.peerConnectionConfig, config.peerConnectionConstraints, remoteId, socketUtil);
+        var peer = new Peer(config.peerConnectionConfig, config.peerConnectionConstraints, remoteId, socketUtil);
         peerMap[remoteId] = peer;
         return peer;
     }
