@@ -14,11 +14,18 @@
 
     app.config(function ($routeProvider) {
        $routeProvider.when(
-           '/', {templateUrl: 'htmls/home.html'}
+           '/', {
+               templateUrl: 'htmls/home.html'
+           }
        ).when(
-           '/view', {templateUrl: 'htmls/stream-view.html'}
+           '/view', {
+               templateUrl: 'htmls/stream-view.html'
+           }
        ).when(
-           '/gps', {templateUrl: 'htmls/stream-gps.html'}
+           '/gps', {
+               templateUrl: 'htmls/stream-gps.html',
+               controller: 'GPSController'
+           }
        )
     });
 
@@ -56,7 +63,8 @@
         return camera;
     }]);
 
-    app.controller('RemoteStreamsController', ['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
+    app.controller('RemoteStreamsController', ['camera', '$location', '$http', '$scope','$rootScope',
+        function(camera, $location, $http, $scope, $rootScope){
         var rtc = this;
         rtc.remoteStreams = [];
 
@@ -125,6 +133,11 @@
                         console.log(err);
                     });
             }
+        };
+
+        rtc.gps = function (stream) {
+            client.peerInit(stream.id);
+            $location.path('/gps').search({id: stream.id});
         };
 
         //initial load
@@ -206,9 +219,17 @@
         };
     }]);
     
-    app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window',function ($location, $http, $scope, $rootScope, $window) {
-        $window.onload = function () {
-            console.log(client.getGPS(remoteId));
+    app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window', '$route',
+        function ($location, $http, $scope, $rootScope, $window, $route) {
+        $scope.$route = $route;
+        var streamId = $location.search().id;
+        $scope.load = function () {
+            console.log('map init');
+            console.log(client.getGPS(streamId));
+            //var peer = new PeerManager();
+            // client.peerInit("06fAU15k-mwD4F-TAAAh");
+            // console.log(client.getGPS("06fAU15k-mwD4F-TAAAh"));
+
             var map = new BMap.Map("allmap");
             var point = new BMap.Point(116.404, 39.915);
             map.centerAndZoom(point, 15);
