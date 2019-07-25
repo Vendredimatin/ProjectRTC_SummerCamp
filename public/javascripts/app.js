@@ -222,22 +222,26 @@
     app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window', '$route',
         function ($location, $http, $scope, $rootScope, $window, $route) {
         $scope.$route = $route;
-        var streamId = $location.search().id;
         $scope.load = function () {
-            console.log('map init');
-            console.log(client.getGPS(streamId));
-            //var peer = new PeerManager();
-            // client.peerInit("06fAU15k-mwD4F-TAAAh");
-            // console.log(client.getGPS("06fAU15k-mwD4F-TAAAh"));
-
-            var map = new BMap.Map("allmap");
-            var point = new BMap.Point(116.404, 39.915);
-            map.centerAndZoom(point, 15);
-            function addMarker(point){
-                var marker = new BMap.Marker(point);
-                map.addOverlay(marker);
+            let coordinate;
+            var listening = setInterval(waitDone, 500);
+            function waitDone(){
+                coordinate = client.getGPS($location.search().id);
+                if(coordinate.longitude !== undefined) {
+                    var map = new BMap.Map("allmap");
+                    let longitude = coordinate.longitude;
+                    let latitude = coordinate.latitude;
+                    console.log(longitude, latitude)
+                    var point = new BMap.Point(longitude, latitude);
+                    map.centerAndZoom(point, 15);
+                    function addMarker(point){
+                        var marker = new BMap.Marker(point);
+                        map.addOverlay(marker);
+                    }
+                    addMarker(point);
+                    clearInterval(listening);
+                }
             }
-            addMarker(point)
         }
     }])
 })();
