@@ -19,7 +19,8 @@
            }
        ).when(
            '/view', {
-               templateUrl: 'htmls/stream-view.html'
+               templateUrl: 'htmls/stream-view.html',
+               controller: 'ViewController'
            }
        ).when(
            '/gps', {
@@ -93,12 +94,13 @@
 
         $rootScope.$on("back", function (event, msg) {
             $scope.remoteStreamsIfShow = true;
-        })
+        });
 
         rtc.view = function(stream){
             console.log('hi');
             $scope.remoteStreamsIfShow = false;
             $rootScope.$broadcast("view",stream);
+            $location.path('/view').search({id: stream.id});
         };
 
         rtc.call = function(stream){
@@ -222,6 +224,7 @@
     app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window', '$route',
         function ($location, $http, $scope, $rootScope, $window, $route) {
         $scope.$route = $route;
+        var gps = this;
         $scope.load = function () {
             let coordinate;
             var listening = setInterval(waitDone, 500);
@@ -231,17 +234,48 @@
                     var map = new BMap.Map("allmap");
                     let longitude = coordinate.longitude;
                     let latitude = coordinate.latitude;
-                    console.log(longitude, latitude)
+                    console.log(longitude, latitude);
                     var point = new BMap.Point(longitude, latitude);
                     map.centerAndZoom(point, 15);
-                    function addMarker(point){
-                        var marker = new BMap.Marker(point);
-                        map.addOverlay(marker);
+                    map.addControl(new BMap.NavigationControl());
+                    var convertor = new BMap.Convertor();
+                    var pointArr = [];
+                    pointArr.push(point);
+                    function translateCallback(data) {
+                        if(data.status === 0){
+                            var marker = new BMap.Marker(data.points[0]);
+                            map.addOverlay(marker);
+                            map.setCenter(data.points[0]);
+                        }
                     }
-                    addMarker(point);
+                    convertor.translate(pointArr,1,5,translateCallback);
                     clearInterval(listening);
                 }
             }
+        };
+        gps.view = function () {
+            client.peerInit($location.search().id);
+            $location.path('/view').search({id: $location.search().id});
+            console.log('view')
+        };
+        gps.gps = function () {
+            client.peerInit($location.search().id);
+            $location.path('/gps').search({id: $location.search().id});
+            console.log('gps')
         }
-    }])
+    }]);
+    
+    app.controller('ViewController',['$location', '$http', '$scope', '$rootScope', '$window', '$route',
+        function ($location, $http, $scope, $rootScope, $window, $route) {
+        $scope.$route = $route;
+        var view = this;
+        view.view = function () {
+            client.peerInit($location.search().id);
+            $location.path('/view').search({id: $location.search().id});
+        };
+        view.gps = function () {
+            client.peerInit($location.search().id);
+            $location.path('/gps').search({id: $location.search().id});
+        }
+        }])
 })();
