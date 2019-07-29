@@ -27,6 +27,11 @@
                templateUrl: 'htmls/stream-gps.html',
                controller: 'GPSController'
            }
+       ).when(
+           '/guide', {
+               templateUrl: 'htmls/stream-guide.html',
+               controller: 'GuideController'
+           }
        )
     });
 
@@ -96,13 +101,6 @@
             $scope.remoteStreamsIfShow = true;
         });
 
-        rtc.view = function(stream){
-            console.log('hi');
-            $scope.remoteStreamsIfShow = false;
-            $rootScope.$broadcast("view",stream);
-            $location.path('/view').search({id: stream.id});
-        };
-
         rtc.call = function(stream){
             /* If json isn't loaded yet, construct a new stream
              * This happens when you load <serverUrl>/<socketId> :
@@ -137,9 +135,9 @@
             }
         };
 
-        rtc.gps = function (stream) {
-            client.peerInit(stream.id);
-            $location.path('/gps').search({id: stream.id});
+        rtc.route = function (stream) {
+            sessionStorage.setItem(stream.id, JSON.stringify(stream));
+            $location.path('/guide').search({id: stream.id});
         };
 
         //initial load
@@ -220,11 +218,31 @@
             }
         };
     }]);
+
+    app.controller('GuideController', ['$location', '$http', '$scope', '$rootScope', '$window', '$route',
+        function ($location, $http, $scope, $rootScope, $window, $route) {
+        $scope.$route = $route;
+        var streamId = $location.search().id;
+        var stream = JSON.parse(sessionStorage.getItem(streamId));
+        var guide = this;
+
+        guide.view = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/view').search({id: streamId});
+        };
+
+        guide.gps = function () {
+            client.peerInit(streamId);
+            $location.path('/gps').search({id: streamId});
+        }
+    }]);
     
     app.controller('GPSController',['$location', '$http', '$scope','$rootScope', '$window', '$route',
         function ($location, $http, $scope, $rootScope, $window, $route) {
         $scope.$route = $route;
         var gps = this;
+        var streamId = $location.search().id;
+        var stream = JSON.parse(sessionStorage.getItem(streamId));
         $scope.load = function () {
             let coordinate;
             var listening = setInterval(waitDone, 500);
@@ -254,14 +272,12 @@
             }
         };
         gps.view = function () {
-            client.peerInit($location.search().id);
-            $location.path('/view').search({id: $location.search().id});
-            console.log('view')
+            $rootScope.$broadcast("view",stream);
+            $location.path('/view').search({id: streamId});
         };
         gps.gps = function () {
             client.peerInit($location.search().id);
-            $location.path('/gps').search({id: $location.search().id});
-            console.log('gps')
+            $location.path('/gps').search({id: streamId});
         }
     }]);
     
@@ -269,13 +285,20 @@
         function ($location, $http, $scope, $rootScope, $window, $route) {
         $scope.$route = $route;
         var view = this;
+        var remoteStream;
+        var streamId = $location.search().id;
+        var stream = JSON.parse(sessionStorage.getItem(streamId));
         view.view = function () {
-            client.peerInit($location.search().id);
-            $location.path('/view').search({id: $location.search().id});
+            $rootScope.$broadcast("view",stream);
+            $location.path('/view').search({id: streamId});
         };
         view.gps = function () {
+            client.peerInit(streamId);
+            $location.path('/gps').search({id: streamId});
+        };
+        $scope.viewStream = function () {
             client.peerInit($location.search().id);
-            $location.path('/gps').search({id: $location.search().id});
+            $scope.functions = ['Screen','GPS', 'Camera'];
         }
-        }])
+    }])
 })();

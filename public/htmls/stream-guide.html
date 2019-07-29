@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View-stream</title>
+    <title>Guide</title>
 </head>
 <body>
-<div style="padding: 0; margin: 0; width: 100%;height: 100%" ng-controller="ViewController as view" ng-init="viewStream()">
+<div style="padding: 0; margin: 0; width: 100%;height: 100%" ng-controller="GuideController as guide">
     <div class="header">
 
     </div>
@@ -16,15 +16,15 @@
                     <h1 class="md-toolbar-tools">Provided</h1>
                 </md-toolbar>
                 <md-content style="width: 100%;" layout-padding>
-                    <md-button class="md-primary" ng-click="view.view()">
-                        <strong>View</strong>
+                    <md-button class="md-primary" ng-click="guide.view()">
+                        View
                     </md-button>
                     <br/>
                     <md-button class="md-primary">
                         Call
                     </md-button>
                     <br/>
-                    <md-button class="md-primary" ng-click="view.gps()">
+                    <md-button class="md-primary" ng-click="guide.gps()">
                         GPS
                     </md-button>
                     <br/>
@@ -34,9 +34,7 @@
                 </md-content>
             </md-sidenav>
             <md-content flex layout-padding>
-                <div id="container">
-                    <div id="remoteVideosContainer"></div>
-                </div>
+
             </md-content>
         </section>
     </div>

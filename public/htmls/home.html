@@ -9,31 +9,22 @@
     <div class="header">
 
     </div>
-    <div style="margin-left: 40px;">
+    <div style="margin-left: 44%;">
         <h2>Remote Streams</h2>
     </div>
     <div class="main-panel">
         <div class="remoteStreams" ng-controller="RemoteStreamsController as rtc">
-            <table class="mt">
-                <thead>
-                <tr>
-                    <th>id</th><th>Stream</th><th>1-way</th><th>2-way</th><th>3-way</th><th>4-way</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="stream in rtc.remoteStreams" ng-class="{'selected' : stream.isPlaying}">
-                    <td><a>{{stream.id}}</a></td>
-                    <td><a>{{stream.name}}</a></td>
-                    <!--<td ng-click="rtc.view(stream)"><a>View</a></td>-->
-                    <!--<td ng-click="rtc.call(stream)"><a>Call</a></td>-->
-                    <td><a ng-click="rtc.view(stream)">View</a></td>
-                    <td><a ng-click="rtc.call(stream)">Call</a></td>
-                    <td><a ng-click="rtc.gps(stream)">GPS</a></td>
-                    <td><a>FingerPrint</a></td>
-                </tr>
-                </tbody>
-            </table>
-            <!--<div ui-grid="gridOptions" class="grid"></div>-->
+            <md-content>
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="stream in rtc.remoteStreams"  ng-click="rtc.route(stream)">
+                        <img ng-src="./images/android.png" class="md-avatar" />
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ stream.id }}</h3>
+                            <h4>{{ stream.name }}</h4>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-content>
             <div class="refresh" ng-click="rtc.loadData()" style="width: 30%">
                 <a href>Refresh</a>
             </div>
