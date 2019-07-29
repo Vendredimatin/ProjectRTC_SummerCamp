@@ -25,11 +25,11 @@ class Peer{
         pc.onaddstream = function(event) {
             //stream 来自rtc.loadData
             attachMediaStream(remoteVideoEl, event.stream);
-           // remoteVideosContainer.appendChild(remoteVideoEl);
+           remoteVideosContainer.appendChild(remoteVideoEl);
         };
         pc.onremovestream = function(event) {
             remoteVideoEl.src = '';
-           // remoteVideosContainer.removeChild(remoteVideoEl);
+            remoteVideosContainer.removeChild(remoteVideoEl);
         };
         pc.oniceconnectionstatechange = function(event) {
             switch(
@@ -37,7 +37,7 @@ class Peer{
                     || event.target   ) // Firefox
                     .iceConnectionState) {
                 case 'disconnected':
-             ///       remoteVideosContainer.removeChild(remoteVideoEl);
+                    remoteVideosContainer.removeChild(remoteVideoEl);
                     break;
             }
         };
