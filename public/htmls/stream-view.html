@@ -13,23 +13,27 @@
         <section layout="row" flex>
             <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="true" style="height: 700px;width:15%">
                 <md-toolbar class="md-theme-indigo">
-                    <h1 class="md-toolbar-tools">Provided</h1>
+                    <h1 class="md-toolbar-tools">提供服务</h1>
                 </md-toolbar>
                 <md-content style="width: 100%;" layout-padding>
                     <md-button class="md-primary" ng-click="view.view()">
-                        <strong>View</strong>
+                        <strong><span style="font-size: 15px">屏幕共享</span></strong>
                     </md-button>
                     <br/>
                     <md-button class="md-primary">
-                        Call
+                        后摄监控
+                    </md-button>
+                    <br/>
+                    <md-button class="md-primary">
+                        前摄监控
                     </md-button>
                     <br/>
                     <md-button class="md-primary" ng-click="view.gps()">
-                        GPS
+                        位置监控
                     </md-button>
                     <br/>
                     <md-button class="md-primary">
-                        Fingerprint
+                        指纹认证
                     </md-button>
                 </md-content>
             </md-sidenav>

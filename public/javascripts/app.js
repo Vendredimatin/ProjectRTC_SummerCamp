@@ -227,7 +227,6 @@
         var guide = this;
 
         guide.view = function () {
-            $rootScope.$broadcast("view",stream);
             $location.path('/view').search({id: streamId});
         };
 
@@ -297,8 +296,11 @@
             $location.path('/gps').search({id: streamId});
         };
         $scope.viewStream = function () {
+            //console.log('view init')
+            $rootScope.$broadcast("view",stream);
             client.peerInit($location.search().id);
+            client.getScreen($location.search().id);
             $scope.functions = ['Screen','GPS', 'Camera'];
-        }
+        };
     }])
 })();
