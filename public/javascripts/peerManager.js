@@ -18,6 +18,9 @@ var PeerManager = (function () {
         localStream,
         socketUtil = new SocketUtil(),
         socket = socketUtil.getSocket();
+        /*remoteVideosContainer = null;*/
+
+
 
     socket.on('message', handleMessage);
     socket.on('id', function(id) {
@@ -153,7 +156,24 @@ var PeerManager = (function () {
 
         getPeer: function (remoteId) {
             return peerMap[remoteId];
+        },
+
+      /*  setContainer: function (container) {
+              remoteVideosContainer = container;
+        },*/
+
+        getScreen: function (remoteId) {
+            sendDataByChannel("screen", remoteId);
+        },
+
+        getFrontCamera: function (remoteId) {
+            sendDataByChannel("front", remoteId);
+        },
+
+        getBackCamera: function (remoteId) {
+            sendDataByChannel("back", remoteId);
         }
+
     };
 
 });
