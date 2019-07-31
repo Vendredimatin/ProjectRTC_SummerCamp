@@ -32,6 +32,16 @@
                templateUrl: 'htmls/stream-guide.html',
                controller: 'GuideController'
            }
+       ).when(
+           '/front-camera', {
+               templateUrl: 'htmls/stream-frontcam.html',
+               controller: 'FrontCameraController'
+           }
+       ).when(
+           '/back-camera', {
+               templateUrl: 'htmls/stream-backcam.html',
+               controller: 'BackCameraController'
+           }
        )
     });
 
@@ -147,78 +157,6 @@
         };
     }]);
 
-    app.controller('DetailController',['camera', '$location', '$http', '$scope','$rootScope', function(camera, $location, $http, $scope, $rootScope){
-        var detail = this;
-        var remoteStream;
-
-        $scope.detailIfShow = false;
-        $rootScope.$on("view", function (event, stream) {
-            remoteStream = stream;
-
-
-            $scope.detailIfShow = true;
-            console.log("client.id", client.getId());
-            console.log("stream.id",stream.id);
-            console.log(event);
-            detail.viewStream(stream)
-        })
-
-        detail.viewStream = function (stream) {
-            client.peerInit(stream.id);
-            stream.isPlaying = !stream.isPlaying;
-            $scope.functions = ['Screen','GPS', 'Camera'];
-        }
-
-        detail.back = function () {
-            $scope.detailIfShow = false;
-            $rootScope.$broadcast("back","back to remote-streams.ejs");
-        }
-
-        detail.sendData = function () {
-            //client.createDataChannel(remoteStream.id);
-            var textArea = document.getElementById("sendInfo");
-            var info = textArea.value;
-
-            //client.sendDataByChannel(info);
-            client.sendData(info, remoteStream.id);
-        }
-    }]);
-
-    app.controller('LocalStreamController',['camera', '$scope', '$window', function(camera, $scope, $window){
-        var localStream = this;
-        localStream.name = 'Guest';
-        localStream.link = '';
-        localStream.cameraIsOn = false;
-
-        $scope.$on('cameraIsOn', function(event,data) {
-            $scope.$apply(function() {
-                localStream.cameraIsOn = data;
-            });
-        });
-
-        localStream.toggleCam = function(){
-            if(localStream.cameraIsOn){
-                camera.stop()
-                    .then(function(result){
-                        client.send('leave');
-                        client.setLocalStream(null);
-                    })
-                    .catch(function(err) {
-                        console.log(err);
-                    });
-            } else {
-                camera.start()
-                    .then(function(result) {
-                        localStream.link = $window.location.host + '/' + client.getId();
-                        client.send('readyToStream', { name: localStream.name });
-                    })
-                    .catch(function(err) {
-                        console.log(err);
-                    });
-            }
-        };
-    }]);
-
     app.controller('GuideController', ['$location', '$http', '$scope', '$rootScope', '$window', '$route',
         function ($location, $http, $scope, $rootScope, $window, $route) {
         $scope.$route = $route;
@@ -227,12 +165,23 @@
         var guide = this;
 
         guide.view = function () {
+            $rootScope.$broadcast("view",stream);
             $location.path('/view').search({id: streamId});
         };
 
         guide.gps = function () {
             client.peerInit(streamId);
             $location.path('/gps').search({id: streamId});
+        };
+
+        guide.front_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/front-camera').search({id: streamId});
+        };
+
+        guide.back_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/back-camera').search({id: streamId});
         }
     }]);
     
@@ -277,6 +226,14 @@
         gps.gps = function () {
             client.peerInit($location.search().id);
             $location.path('/gps').search({id: streamId});
+        };
+        gps.front_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/front-camera').search({id: streamId});
+        };
+        gps.back_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/back-camera').search({id: streamId});
         }
     }]);
     
@@ -295,12 +252,76 @@
             client.peerInit(streamId);
             $location.path('/gps').search({id: streamId});
         };
-        $scope.viewStream = function () {
-            //console.log('view init')
+        view.front_camera = function () {
             $rootScope.$broadcast("view",stream);
-            client.peerInit($location.search().id);
-            client.getScreen($location.search().id);
+            $location.path('/front-camera').search({id: streamId});
+        };
+        view.back_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/back-camera').search({id: streamId});
+        };
+        $scope.load = function () {
+            client.peerInit(streamId);
+            client.getScreen(streamId);
             $scope.functions = ['Screen','GPS', 'Camera'];
         };
+    }]);
+
+    app.controller('FrontCameraController', ['$location', '$http', '$scope', '$rootScope', '$window', '$route',
+        function ($location, $http, $scope, $rootScope, $window, $route) {
+        $scope.$route = $route;
+        var front_cam = this;
+        var streamId = $location.search().id;
+        var stream = JSON.parse(sessionStorage.getItem(streamId));
+        front_cam.view = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/view').search({id: streamId});
+        };
+        front_cam.gps = function () {
+            client.peerInit(streamId);
+            $location.path('/gps').search({id: streamId});
+        };
+        front_cam.front_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/front-camera').search({id: streamId});
+        };
+        front_cam.back_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/back-camera').search({id: streamId});
+        };
+        $scope.load = function () {
+            client.peerInit(streamId);
+            client.getFrontCamera(streamId);
+            $scope.functions = ['Screen','GPS', 'Camera'];
+        }
+    }]);
+
+    app.controller('BackCameraController', ['$location', '$http', '$scope', '$rootScope', '$window', '$route',
+        function ($location, $http, $scope, $rootScope, $window, $route) {
+        $scope.$route = $route;
+        var back_cam = this;
+        var streamId = $location.search().id;
+        var stream = JSON.parse(sessionStorage.getItem(streamId));
+        back_cam.view = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/view').search({id: streamId});
+        };
+        back_cam.gps = function () {
+            client.peerInit(streamId);
+            $location.path('/gps').search({id: streamId});
+        };
+        back_cam.front_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/front-camera').search({id: streamId});
+        };
+        back_cam.back_camera = function () {
+            $rootScope.$broadcast("view",stream);
+            $location.path('/back-camera').search({id: streamId});
+        };
+        $scope.load = function () {
+            client.peerInit(streamId);
+            client.getBackCamera(streamId);
+            $scope.functions = ['Screen','GPS','Camera'];
+        }
     }])
 })();
