@@ -77,11 +77,15 @@ class Peer{
 
     onMessageHandler(event){
         const DATA_GPS = "GPS";
+        const DATA_FAIL = "FAIL";
         console.log("Got Data Channel Message:", event.data);
         var data = JSON.parse(event.data);
         if (data['type'] == DATA_GPS){
             this.latitude = data['latitude'];
             this.longitude = data['longitude'];
+        }else if (data['type' == DATA_FAIL]){
+            this.latitude = undefined;
+            this.longitude = undefined;
         }
     }
 
