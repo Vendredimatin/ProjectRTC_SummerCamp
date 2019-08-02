@@ -14,6 +14,7 @@ class Peer{
         console.log("createPeerConnection");
         let pc = new RTCPeerConnection(pcConfig, pcConstraints);
         pc.onicecandidate = function(event) {
+            console.log(event.candidate);
             if (event.candidate) {
                 socketUtil.send('candidate', remoteId, {
                     label: event.candidate.sdpMLineIndex,
@@ -24,6 +25,7 @@ class Peer{
         };
         pc.onaddstream = function(event) {
             //stream 来自rtc.loadData
+            console.log("onaddStream "+ event.stream.active);
             attachMediaStream(remoteVideoEl, event.stream);
            remoteVideosContainer.appendChild(remoteVideoEl);
         };
@@ -59,13 +61,10 @@ class Peer{
             console.log("Data Channel Error:", error);
         };
 
-        dataChannel.onmessage = this.onMessageHandler;  /*function (event) {
-
-        };*/
+        dataChannel.onmessage = this.onMessageHandler;
 
         dataChannel.onopen = function () {
             console.log("open event "+ dataChannel.readyState);
-            console.log("dataChannel has opened");
         };
 
         dataChannel.onclose = function () {
