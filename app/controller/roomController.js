@@ -53,4 +53,5 @@ module.exports = function (app, rooms) {
     app.post('/api/room/roomList/delete/', deleteRoom);
     app.get('/api/room/', getRoom);
     app.get('/api/room/roomCode', getRoomCode);
+    app.get('/api/room/createRoom', createRoom);
 };
