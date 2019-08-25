@@ -2,11 +2,12 @@ var baseDao = require('../dao/baseDao')();
 module.exports = function (app) {
 
     var login = function (req, res) {
-        let username = req.body.name;
+        let username = req.body.username;
         let password = req.body.password;
 
         let obj = {username:username, password:password};
         baseDao.findOne('user',obj,function (result) {
+            console.log(result);
             if (result == null){
                 res.status(200).send(/*ResultMessage.success()*/{code:0,message:"SUCCESS"});
             }else {
@@ -16,10 +17,8 @@ module.exports = function (app) {
     };
 
     var register = function(req, res){
-        console.log("!!!!");
         let username = req.body.username;
         let password = req.body.password;
-        console.log(username);
 
         let obj = {username:username, password:password};
 
