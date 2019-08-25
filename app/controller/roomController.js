@@ -1,5 +1,7 @@
 var baseDao = require('../dao/baseDao')();
+var Room = require('../domain/room');
 module.exports = function (app, rooms) {
+//    var room = require('../domain/room');
 
     var createRoom = function (req, res) {
         let username = req.body.username;
@@ -30,7 +32,7 @@ module.exports = function (app, rooms) {
     var deleteRoom = function (req, res) {
         let roomId = req.body.roomId;
 
-        let whereObj = {_id:roomId};
+        let whereObj = {roomId:roomId};
         let upObj = {$set:{isDelete:true}};
         baseDao.updateOne('room',whereObj,upObj,function (result) {
             console.log(result);

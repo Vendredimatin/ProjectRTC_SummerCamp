@@ -1,5 +1,7 @@
 var baseDao = require('../dao/baseDao')();
+var ResultMessage = require('../domain/resultMessage');
 module.exports = function (app) {
+
 
     var login = function (req, res) {
         let username = req.body.username;
@@ -9,7 +11,7 @@ module.exports = function (app) {
         baseDao.findOne('user',obj,function (result) {
             console.log(result);
             if (result == null){
-                res.status(200).send(/*ResultMessage.success()*/{code:0,message:"SUCCESS"});
+                res.status(200).send(ResultMessage.success()/*{code:0,message:"SUCCESS"}*/);
             }else {
                 res.status(200).send(/*ResultMessage.fail(*/{code:1,message:"FAIL"});
             }

@@ -16,3 +16,5 @@ class ResultMessage {
         return new ResultMessage(2,"FAIL_EXISTED");
     }
 }
+
+module.exports = ResultMessage;
