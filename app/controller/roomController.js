@@ -28,6 +28,9 @@ module.exports = function (app, rooms) {
         res.status(200).send(JSON.stringify({roomList:roomList}));
         /*baseDao.find('room', {username:username}, function (result) {
             console.log(result);
+            if (result != null){
+                console.log(result['ops']);
+            }
         })*/
     };
 
@@ -54,9 +57,9 @@ module.exports = function (app, rooms) {
         let room = rooms[roomId];
 
         res.status(20).send(JSON.stringify({roomId:roomId, roomCode:room.roomCode}));
-    }
+    };
 
-    app.get('/api/room/roomList', getRoomList);
+    app.post('/api/room/roomList', getRoomList);
     app.post('/api/room/roomList/delete/', deleteRoom);
     app.get('/api/room/', getRoom);
     app.get('/api/room/roomCode', getRoomCode);
