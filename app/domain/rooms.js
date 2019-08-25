@@ -17,6 +17,9 @@ module.exports = function () {
 
         addStream(roomId, roomCode, deviceId, deviceName){
             let room = roomList[roomId];
+            if (room == undefined)
+                return false;
+
             if (roomCode != roomCode){
                 return false;
             }
