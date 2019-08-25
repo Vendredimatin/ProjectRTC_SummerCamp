@@ -4,8 +4,13 @@ var PeerManager = (function () {
         config = {
             peerConnectionConfig: {
                 iceServers: [
-                    {"url": "stun:23.21.150.121"},
-                    {"url": "stun:stun.l.google.com:19302"}
+                    {"url": "stun:stun.101.132.41.254:3478",
+                      "username":'lhy:123456',
+                    },
+                    {"url": "turn:turn.101.132.41.254:3478",
+                    "username":'lhy:123456',
+                    }
+                    /*{"url": "stun:stun.l.google.com:19302"}*/
                 ]
             },
             peerConnectionConstraints: {
@@ -17,8 +22,8 @@ var PeerManager = (function () {
         peerMap = {},
         localStream,
         socketUtil = new SocketUtil(),
-        socket = socketUtil.getSocket();
-        /*remoteVideosContainer = null;*/
+        socket = socketUtil.getSocket(),
+        remoteVideosContainer = null;
 
 
 
@@ -29,7 +34,7 @@ var PeerManager = (function () {
 
     function addPeer(remoteId) {
         console.log("addPeer");
-        var peer = new Peer(config.peerConnectionConfig, config.peerConnectionConstraints, remoteId, socketUtil);
+        var peer = new Peer(config.peerConnectionConfig, config.peerConnectionConstraints, remoteId, socketUtil, remoteVideosContainer);
         peerMap[remoteId] = peer;
         return peer;
     }
@@ -136,7 +141,7 @@ var PeerManager = (function () {
         },
 
         peerRenegociate: function(remoteId) {
-            offer(remoteId);
+            socketUtil.send('init',remoteId, null);
         },
 
         send: function(type, payload) {
@@ -158,15 +163,16 @@ var PeerManager = (function () {
             return peerMap[remoteId];
         },
 
-      /*  setContainer: function (container) {
+        setContainer: function (container) {
               remoteVideosContainer = container;
-        },*/
+        },
 
         getScreen: function (remoteId) {
             sendDataByChannel("screen", remoteId);
         },
 
         getFrontCamera: function (remoteId) {
+
             sendDataByChannel("front", remoteId);
         },
 
