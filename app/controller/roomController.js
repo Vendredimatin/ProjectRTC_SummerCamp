@@ -1,17 +1,19 @@
 var baseDao = require('../dao/baseDao')();
 var Room = require('../domain/room');
+var ResultMessage = require
 module.exports = function (app, rooms) {
-//    var room = require('../domain/room');
 
     var createRoom = function (req, res) {
         let username = req.body.username;
         let type = req.body.type;
+        console.log(username);
 
         let newRoom = new Room(username, type, new Date().toLocaleDateString(), false);
         baseDao.insertOne('room', newRoom, function (result) {
             if (result['result']['ok'] == 1){
-                res.status(200).send(result['op']['_id']);
+                //console.log(result);
                 rooms.addRoom(newRoom);
+                res.status(200).send(JSON.stringify(result['ops'][0]['roomId']));
             } else res.status(200).send(ResultMessage.fail());
         });
         //rooms.addRoom(newRoom);
@@ -58,5 +60,5 @@ module.exports = function (app, rooms) {
     app.post('/api/room/roomList/delete/', deleteRoom);
     app.get('/api/room/', getRoom);
     app.get('/api/room/roomCode', getRoomCode);
-    app.get('/api/room/createRoom', createRoom);
+    app.post('/api/room/createRoom', createRoom);
 };
