@@ -10,7 +10,7 @@ class Room {
     }
 
     createId(){
-        var str = '0123456789';
+        var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = '';
         for (let i = 0; i < 6; i++){
             var n=parseInt(Math.random()*str.length);

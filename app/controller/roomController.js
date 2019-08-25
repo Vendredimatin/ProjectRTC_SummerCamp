@@ -6,18 +6,22 @@ module.exports = function (app, rooms) {
         let type = req.body.type;
 
         let newRoom = new Room(username, type, new Date().toLocaleDateString(), false);
-        /*baseDao.insertOne('room', newRoom, function (result) {
+        baseDao.insertOne('room', newRoom, function (result) {
             if (result['result']['ok'] == 1){
                 res.status(200).send(result['op']['_id']);
-                //rooms.addRoom()
+                rooms.addRoom(newRoom);
             } else res.status(200).send(ResultMessage.fail());
-        });*/
-        rooms.addRoom(newRoom);
+        });
+        //rooms.addRoom(newRoom);
     };
 
     var getRoomList = function (req, res) {
         let username = req.body.username;
-        res.status(200).send(JSON.stringify({roomList:rooms.getRoomsList()}));
+        let roomList = [];
+        for(let key in rooms){
+            roomList.push(rooms[key]);
+        }
+        res.status(200).send(JSON.stringify({roomList:roomList}));
         /*baseDao.find('room', {username:username}, function (result) {
             console.log(result);
         })*/
