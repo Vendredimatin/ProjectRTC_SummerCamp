@@ -21,7 +21,7 @@ module.exports = function(app, streams) {
     res.status(200).json(data);
   };
 
-  app.get('/streams.json', displayStreams);
+  app.get('/api/streams.json', displayStreams);
   app.get('/', index);
   app.get('/:id', index);
 }

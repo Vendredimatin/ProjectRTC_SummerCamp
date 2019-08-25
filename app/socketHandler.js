@@ -1,4 +1,4 @@
-module.exports = function(io, streams) {
+module.exports = function(io, rooms) {
 
   //监听客户端连接，回调函数会传递本次连接的socket
   io.on('connection', function(client) {
@@ -22,8 +22,13 @@ module.exports = function(io, streams) {
     // 监听消息，名字可以自命名，根据客户端的id和options的name闯将一个新流
     client.on('readyToStream', function(options) {
       console.log('-- ' + client.id + ' is ready to stream --');
-      
-      streams.addStream(client.id, options.name); 
+      console.log(options);
+      let roomId = options.id;
+      let roomCode = options.code;
+      let deviceName = options.name;
+      let deviceId = options.mac;
+      rooms.addStream(roomId,roomCode, client.id, options.name);
+      //streams.addStream(client.id, options.name);
     });
     
     client.on('update', function(options) {
