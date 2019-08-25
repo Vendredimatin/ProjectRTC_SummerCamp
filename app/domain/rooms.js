@@ -24,6 +24,10 @@ module.exports = function () {
                 return false;
             }
             room.addStream(deviceId, deviceName);
+        },
+
+        getRoomsList(){
+            return roomList;
         }
     }
 };
