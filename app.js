@@ -6,7 +6,7 @@
 var express = require('express')
 ,	path = require('path')
 ,	streams = require('./app/streams.js')();
-
+var rooms = require('./app/domain/rooms.js')();
 var favicon = require('serve-favicon')
 ,	logger = require('morgan')
 ,	methodOverride = require('method-override')
@@ -14,7 +14,6 @@ var favicon = require('serve-favicon')
 ,	errorHandler = require('errorhandler');
 
 var app = express();
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -43,4 +42,6 @@ var io = require('socket.io').listen(server);
 /**
  * Socket.io event handling
  */
-require('./app/socketHandler.js')(io, streams);
+require('./app/socketHandler.js')(io, rooms);
+require('./app/controller/userController.js')(app);
+require('./app/controller/roomController.js')(app);

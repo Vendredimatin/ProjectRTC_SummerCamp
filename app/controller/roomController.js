@@ -1,7 +1,6 @@
-var baseDao = require('../dao/baseDao');
+var baseDao = require('../dao/baseDao')();
 module.exports = function (app, rooms) {
-    let baseDao = baseDao();
-    
+
     var createRoom = function (req, res) {
         let username = req.body.username;
         let type = req.body.type;

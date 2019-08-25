@@ -1,6 +1,5 @@
-var baseDao = require('../dao/baseDao');
+var baseDao = require('../dao/baseDao')();
 module.exports = function (app) {
-    let baseDao = baseDao();
 
     var login = function (req, res) {
         let username = req.body.name;
@@ -9,16 +8,18 @@ module.exports = function (app) {
         let obj = {username:username, password:password};
         baseDao.findOne('user',obj,function (result) {
             if (result == null){
-                res.status(200).send(ResultMessage.success());
+                res.status(200).send(/*ResultMessage.success()*/{code:0,message:"SUCCESS"});
             }else {
-                res.status(200).send(ResultMessage.fail());
+                res.status(200).send(/*ResultMessage.fail(*/{code:1,message:"FAIL"});
             }
         });
     };
 
     var register = function(req, res){
-        let username = req.body.name;
+        console.log("!!!!");
+        let username = req.body.username;
         let password = req.body.password;
+        console.log(username);
 
         let obj = {username:username, password:password};
 
@@ -26,11 +27,11 @@ module.exports = function (app) {
             if (result == null){
                 baseDao.insertOne('user',obj, function (result) {
                     if (result['result']['ok'] == 1){
-                        res.status(200).send(ResultMessage.success());
-                    } else res.status(200).send(ResultMessage.fail());
+                        res.status(200).send({code:0,message:"SUCCESS"});
+                    } else res.status(200).send({code:1,message:"FAIL"});
                 });
             }else {
-                res.status(200).send(ResultMessage.fail_existed());
+                res.status(200).send({code:2,message:"FAIL_EXISTED"});
             }
         });
 
