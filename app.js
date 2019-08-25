@@ -44,4 +44,4 @@ var io = require('socket.io').listen(server);
  */
 require('./app/socketHandler.js')(io, rooms);
 require('./app/controller/userController.js')(app);
-require('./app/controller/roomController.js')(app);
+require('./app/controller/roomController.js')(app,rooms);
