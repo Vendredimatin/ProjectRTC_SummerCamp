@@ -18,7 +18,7 @@ module.exports = function (app, rooms) {
     var getRoomList = function (req, res) {
         let username = req.body.username;
         let roomList = [];
-        for(let key in rooms){
+        for(let key in rooms.getRoomsList()){
             roomList.push(rooms[key]);
         }
         res.status(200).send(JSON.stringify({roomList:roomList}));
