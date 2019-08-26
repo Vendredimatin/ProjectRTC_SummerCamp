@@ -3,12 +3,12 @@ module.exports = function () {
     
     let roomList = {};
     //每分钟执行一次
-    schedule.scheduleJob('5 * * * * *', function(){
+   /* schedule.scheduleJob('5 * * * * *', function(){
         for (let i = 0; i < roomList.length; i++) {
             let room = roomList[i];
             room.changeCode();
         }
-    });
+    });*/
 
     return{
         addRoom:function (newRoom) {
