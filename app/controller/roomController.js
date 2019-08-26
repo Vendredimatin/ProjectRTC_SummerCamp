@@ -23,7 +23,7 @@ module.exports = function (app, rooms) {
         let username = req.body.username;
 
 
-        baseDao.find('room', {username:username}, function (result) {
+        baseDao.find('room', {username:username,isDelete:false}, function (result) {
             console.log(result);
             res.status(200).send(JSON.stringify({roomList:result}));
         })
