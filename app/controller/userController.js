@@ -1,7 +1,8 @@
 var baseDao = require('../dao/baseDao')();
 var ResultMessage = require('../domain/resultMessage');
-module.exports = function (app) {
-
+var Room = require('../domain/room');
+module.exports = function (app, rooms) {
+    let roomCollection = 'room';
 
     var login = function (req, res) {
         let username = req.body.username;
@@ -12,6 +13,13 @@ module.exports = function (app) {
             console.log(result);
             if (result == null) {
                 res.status(200).send(ResultMessage.success()/*{code:0,message:"SUCCESS"}*/);
+                baseDao.find('room', {username:username,isDelete:false}, function (result) {
+                    for (let i = 0; i <result.length; i++) {
+                        let newRoom = new Room(username,result[i].roomType,result[i].createTime,result[i].isDelete
+                            ,result[i].streamList,result[i].roomCode,result[i].roomId);
+                        rooms.addRoom(newRoom);
+                    }
+                })
             } else {
                 res.status(200).send(/*ResultMessage.fail(*/{code: 1, message: "FAIL"});
             }

@@ -1,12 +1,13 @@
+let Stream = require('../domain/stream');
 class Room {
-    constructor(username, type, createTime, isDelete){
+    constructor(username, type, createTime, isDelete, streamList, roomCode, roomId){
         this.username = username;
         this.roomType = type;
         this.createTime = createTime;
         this.isDelete = isDelete;
-        this.streamList = [];
-        this.roomCode = this.createCode();
-        this.roomId = this.createId();
+        this.streamList = (streamList == undefined)?[]:streamList;
+        this.roomCode = (roomCode== undefined)?this.createCode():roomCode;
+        this.roomId = (roomId == undefined)?this.createId():roomId;
     }
 
     createId(){
@@ -19,7 +20,7 @@ class Room {
         return res;
     }
 
-    static createCode(){
+    createCode(){
         var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = '';
         for(var i=0;i<4;i++){

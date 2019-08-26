@@ -4,3 +4,5 @@ class Stream {
         this.name = name;
     }
 }
+
+module.exports = Stream;
