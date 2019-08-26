@@ -45,9 +45,15 @@ module.exports = function (app, rooms) {
 
     var getRoom = function (req, res) {
         let roomId = req.body.roomId;
-        let room = rooms[roomId];
-        let obj = {roomId:roomId, roomType: room.roomType, roomCode:room.roomCode, streamList:room.streamList};
-        res.status(200).send(JSON.stringify(obj));
+        let room = rooms.getRoomsList()[roomId];
+        baseDao.findOne('room',{roomId:roomId},function (result) {
+            console.log(result);
+            if (rooms.getRoomsList()['roomId'] != undefined)
+                result['streamList'] = rooms.getRoomsList()['roomId'].streamList;
+            res.send(JSON.stringify(result));
+        });
+        //let obj = {roomId:roomId, roomType: room.roomType, roomCode:room.roomCode, streamList:room.streamList};
+        //res.status(200).send(JSON.stringify(obj));
     };
 
     var getRoomCode = function (req, res) {

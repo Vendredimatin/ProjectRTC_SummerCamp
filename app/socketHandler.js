@@ -27,17 +27,18 @@ module.exports = function(io, rooms) {
       let roomCode = options.code;
       let deviceName = options.name;
       let deviceId = options.mac;
+      console.log(roomId,roomCode);
       rooms.addStream(roomId,roomCode, client.id, options.name);
       //streams.addStream(client.id, options.name);
     });
     
     client.on('update', function(options) {
-      streams.update(client.id, options.name);
+      //streams.update(client.id, options.name);
     });
 
     function leave() {
       console.log('-- ' + client.id + ' left --');
-      streams.removeStream(client.id);
+      //streams.removeStream(client.id);
     }
 
     client.on('disconnect', leave);

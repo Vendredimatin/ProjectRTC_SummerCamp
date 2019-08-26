@@ -21,18 +21,19 @@ function find(collection, obj, callback){
     })
 }
 
+/*
 function demo(){
     find('room',{username:'lhy'}, function (result) {
         console.log(result)
     });
 
-   /* insertOne('user',{username:'zzh', password:123}, function(result){
+   /!* insertOne('user',{username:'zzh', password:123}, function(result){
         console.log(result['result']['ok']);
         });
-*/
+*!/
 }
+*/
 
-demo();
 /*
 function findOne(collection, whereObj, callback) {
     __connect(function (db) {
