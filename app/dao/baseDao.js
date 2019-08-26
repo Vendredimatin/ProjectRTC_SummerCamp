@@ -12,16 +12,27 @@ function __connect(callback){
     })
 }
 
-/*function demo(){
-    findOne('user',{username:'zzh',password:123}, function (result) {
+function find(collection, obj, callback){
+    __connect(function (db, client) {
+        db.collection(collection).find(obj).toArray(function (err, result) {
+            callback(result);
+            //  client.close();
+        })
+    })
+}
+
+function demo(){
+    find('room',{username:'lhy'}, function (result) {
         console.log(result)
     });
 
-   /!* insertOne('user',{username:'zzh', password:123}, function(result){
+   /* insertOne('user',{username:'zzh', password:123}, function(result){
         console.log(result['result']['ok']);
         });
-*!/
-}*/
+*/
+}
+
+demo();
 /*
 function findOne(collection, whereObj, callback) {
     __connect(function (db) {
@@ -51,16 +62,16 @@ module.exports = function () {
             __connect(function (db, client) {
                 db.collection(collection).insert(obj, function (err, result) {
                     callback(result);
-                    client.close();
+                   // client.close();
                 })
             });
         },
 
         find:function(collection, obj, callback){
             __connect(function (db, client) {
-                db.collection(collection).find(obj, function (err, result) {
+                db.collection(collection).find(obj).toArray(function (err, result) {
                     callback(result);
-                    client.close();
+                  //  client.close();
                 })
             })
         },
@@ -69,7 +80,7 @@ module.exports = function () {
             __connect(function (db, client) {
                 db.collection(collection).findOne(whereObj, function (err, result) {
                     callback(result);
-                    client.close();
+                  //  client.close();
                 })
             })
         },
@@ -78,7 +89,7 @@ module.exports = function () {
             __connect(function (db, client) {
                 db.collection(collection).updateOne(whereObj,upObj,function (err, result) {
                     callback(result);
-                    client.close();
+                  //  client.close();
                 })
             })
         }
