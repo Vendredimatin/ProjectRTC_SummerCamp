@@ -46,7 +46,7 @@ module.exports = function (app, rooms) {
     var getRoom = function (req, res) {
         let roomId = req.body.roomId;
         let room = rooms[roomId];
-        let obj = {roomId:roomId, roomType: room.roomType, roomCode:room.roomCode};
+        let obj = {roomId:roomId, roomType: room.roomType, roomCode:room.roomCode, streamList:room.streamList};
         res.status(200).send(JSON.stringify(obj));
     };
 
