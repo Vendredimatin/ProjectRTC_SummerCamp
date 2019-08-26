@@ -61,14 +61,10 @@ module.exports = function (app, rooms) {
 
         let room = rooms.getRoomsList()[roomId];
         baseDao.findOne('room',{roomId:roomId},function (result) {
-            console.log(result);
-            if (rooms.getRoomsList()['roomId'] != undefined)
-                result['streamList'] = rooms.getRoomsList()['roomId'].streamList;
-            result['roomCode'] = rooms.getRoomsList()['roomId'].createCode();
-            res.send(JSON.stringify(result));
+            let roomCode = rooms.getRoomsList()['roomId'].createCode();
+            res.send(JSON.stringify({roomCode:roomCode}));
         });
 
-        res.status(200).send(JSON.stringify({roomId:roomId, roomCode:room.roomCode}));
     };
 
     app.post('/api/room/roomList', getRoomList);
