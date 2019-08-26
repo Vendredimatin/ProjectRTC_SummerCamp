@@ -59,11 +59,10 @@ module.exports = function (app, rooms) {
     var getRoomCode = function (req, res) {
         let roomId = req.body.roomId;
 
-        let room = rooms.getRoomsList()[roomId];
-        baseDao.findOne('room',{roomId:roomId},function (result) {
-            let roomCode = rooms.getRoomsList()['roomId'].createCode();
+       // baseDao.findOne('room',{roomId:roomId},function (result) {
+            let roomCode = Room.createCode();
             res.send(JSON.stringify({roomCode:roomCode}));
-        });
+       // });
 
     };
 

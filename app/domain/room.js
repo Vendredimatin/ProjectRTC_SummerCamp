@@ -19,7 +19,7 @@ class Room {
         return res;
     }
 
-    createCode(){
+    static createCode(){
         var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = '';
         for(var i=0;i<4;i++){
