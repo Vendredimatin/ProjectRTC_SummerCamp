@@ -46,7 +46,7 @@ module.exports = function (app, rooms) {
     var getRoom = function (req, res) {
         let roomId = req.body.roomId;
         let room = rooms[roomId];
-        let obj = {roomId:roomId, roomType: room.roomType, roomCode:room.roomCode, streamList:room.streamList};
+        let obj = {roomId:roomId, roomType: room.rooType, roomCode:room.roomCode, streamList:room.streamList};
         res.status(200).send(JSON.stringify(obj));
     };
 
@@ -60,7 +60,7 @@ module.exports = function (app, rooms) {
 
     app.post('/api/room/roomList', getRoomList);
     app.post('/api/room/roomList/delete/', deleteRoom);
-    app.get('/api/room/', getRoom);
-    app.get('/api/room/roomCode', getRoomCode);
+    app.post('/api/room/', getRoom);
+    app.post('/api/room/roomCode', getRoomCode);
     app.post('/api/room/createRoom', createRoom);
 };

@@ -1,11 +1,11 @@
 class Room {
     constructor(username, type, createTime, isDelete){
         this.username = username;
-        this.type = type;
+        this.roomType = type;
         this.createTime = createTime;
         this.isDelete = isDelete;
         this.streamList = [];
-        this.code = this.createCode();
+        this.roomCode = this.createCode();
         this.roomId = this.createId();
     }
 
