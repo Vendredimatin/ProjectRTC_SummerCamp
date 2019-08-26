@@ -1,6 +1,6 @@
 var baseDao = require('../dao/baseDao')();
 var Room = require('../domain/room');
-var ResultMessage = require
+var ResultMessage = require('../domain/resultMessage');
 module.exports = function (app, rooms) {
 
     var createRoom = function (req, res) {
@@ -11,7 +11,6 @@ module.exports = function (app, rooms) {
         let newRoom = new Room(username, type, new Date().toLocaleDateString(), false);
         baseDao.insertOne('room', newRoom, function (result) {
             if (result['result']['ok'] == 1){
-                //console.log(result);
                 rooms.addRoom(newRoom);
                 res.status(200).send(JSON.stringify(result['ops'][0]['roomId']));
             } else res.status(200).send(ResultMessage.fail());
@@ -24,18 +23,23 @@ module.exports = function (app, rooms) {
 
 
         baseDao.find('room', {username:username,isDelete:false}, function (result) {
-            console.log(result);
             res.status(200).send(JSON.stringify({roomList:result}));
         })
     };
 
     var deleteRoom = function (req, res) {
         let roomId = req.body.roomId;
-
+        console.log(roomId);
         let whereObj = {roomId:roomId};
         let upObj = {$set:{isDelete:true}};
         baseDao.updateOne('room',whereObj,upObj,function (result) {
-            console.log(result);
+            var re = JSON.parse(result);
+            if (re.n === 1) {
+                res.send(JSON.stringify(ResultMessage.success()));
+            } else {
+                res.send(JSON.stringify(ResultMessage.fail()));
+            }
+
         })
     };
 
@@ -51,7 +55,7 @@ module.exports = function (app, rooms) {
 
         let room = rooms[roomId];
 
-        res.status(20).send(JSON.stringify({roomId:roomId, roomCode:room.roomCode}));
+        res.status(200).send(JSON.stringify({roomId:roomId, roomCode:room.roomCode}));
     };
 
     app.post('/api/room/roomList', getRoomList);
