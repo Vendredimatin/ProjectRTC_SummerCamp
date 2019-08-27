@@ -21,7 +21,6 @@ module.exports = function (app, rooms) {
     var getRoomList = function (req, res) {
         let username = req.body.username;
 
-
         baseDao.find('room', {username:username,isDelete:false}, function (result) {
             res.status(200).send(JSON.stringify({roomList:result}));
         })

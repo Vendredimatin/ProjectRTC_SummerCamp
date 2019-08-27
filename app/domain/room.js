@@ -40,6 +40,15 @@ class Room {
         this.streamList.push(stream);
     }
 
+    removeStream(streamId){
+        for (let i = 0; i < this.streamList.length; i++) {
+            if (streamId == this.streamList[i]){
+                this.streamList.splice(i,1);
+                break;
+            }
+        }
+    }
+
 };
 
 module.exports = Room;

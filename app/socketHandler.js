@@ -38,6 +38,7 @@ module.exports = function(io, rooms) {
 
     function leave() {
       console.log('-- ' + client.id + ' left --');
+      rooms.removeStream(client.id);
       //streams.removeStream(client.id);
     }
 
