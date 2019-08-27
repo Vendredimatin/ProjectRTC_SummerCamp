@@ -43,5 +43,5 @@ var io = require('socket.io').listen(server);
  * Socket.io event handling
  */
 require('./app/socketHandler.js')(io, rooms);
-require('./app/controller/userController.js')(app);
+require('./app/controller/userController.js')(app,rooms);
 require('./app/controller/roomController.js')(app,rooms);

@@ -11,7 +11,7 @@ module.exports = function (app, rooms) {
         let obj = {username: username, password: password};
         baseDao.findOne('user', obj, function (result) {
             console.log(result);
-            if (result == null) {
+            if (result != null) {
                 res.status(200).send(ResultMessage.success()/*{code:0,message:"SUCCESS"}*/);
                 baseDao.find('room', {username:username,isDelete:false}, function (result) {
                     for (let i = 0; i <result.length; i++) {
