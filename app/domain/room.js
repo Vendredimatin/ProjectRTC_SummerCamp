@@ -17,6 +17,7 @@ class Room {
 /*        let numStr = str.substr(0,10);
         let letterStr = str.substr(10);*/
 
+
         if (this.roomType == 'monitor'){
             /*let firstN = parseInt(Math.random() * numStr.length);
             res += numStr[firstN];*/
