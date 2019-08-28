@@ -57,17 +57,29 @@ it('should getRoom', function () {
         })
 });
 
-it('should getRoomCode', function () {
-     baseDao.find('room',{roomId:'v25gu5'},function (result) {
-        for (let i = 0; i <result.length; i++) {
-            let newRoom = new Room("lhy",result[i].roomType,result[i].createTime,result[i].isDelete
-                ,result[i].streamList,result[i].roomCode,result[i].roomId);
-            rooms.addRoom(newRoom);
-            console.log("add.....");
-        }
-        console.log(result.length);
-    });
 
+it('should getRoomCode failed', function () {
+    this.timeout(5000);
+
+    return request(app)
+        .post("/api/room/roomCode")
+        .send({roomId:'v25gu5'})
+        .expect(200)
+        .then(res => {
+            assert.equal(res.statusCode, 200);
+        })
+});
+
+it('should getRoomCode successfully', function () {
+    this.timeout(5000);
+    let streamInfo = {
+        roomId:"v25gu5",
+        roomCode:"axqh",
+        name:'a',
+        mac:'assdasds'
+    };
+
+    rooms.addRoom(streamInfo);
     return request(app)
         .post("/api/room/roomCode")
         .send({roomId:'v25gu5'})

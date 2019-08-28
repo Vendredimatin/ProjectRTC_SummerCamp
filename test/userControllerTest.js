@@ -51,22 +51,27 @@ it('should login failed', function () {
         .expect(200).then(res => {
          assert.equal(res.statusCode, 200);
      })
-       /* .expect(function (res) {
-            console.log(res.statusCode);
-        })*/
+
 });
 
-it('should register user', function () {
+it('should register user successfully', function () {
     this.timeout(5000);
      return request(app)
         .post('/api/user/register')
-        .send({username:'bbb','password':'123'})
+        .send({username:'ccc','password':'123'})
         .expect(200).then(res => {
          assert.equal(res.statusCode, 200);
      })
-        /*.expect(function (res) {
-            //assert.equal(res.toString(),'{code: 0, message: "SUCCESS"}');
-        }).end()*/
+});
+
+it('should register user failed as user has existed', function () {
+    this.timeout(5000);
+    return request(app)
+        .post('/api/user/register')
+        .send({username:'bbb','password':'123'})
+        .expect(200).then(res => {
+            assert.equal(res.statusCode, 200);
+        })
 });
 
 it('should register failed as user has existed', function () {

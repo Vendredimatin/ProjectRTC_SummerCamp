@@ -53,7 +53,7 @@ class Room {
 
     removeStream(streamId){
         for (let i = 0; i < this.streamList.length; i++) {
-            if (streamId == this.streamList[i]){
+            if (streamId == this.streamList[i].id){
                 this.streamList.splice(i,1);
                 break;
             }
