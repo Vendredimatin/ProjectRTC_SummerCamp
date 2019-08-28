@@ -24,6 +24,7 @@ class Room {
         }else {
             /*let firstN = parseInt(Math.random() * letterStr.length);
             res += letterStr[firstN];*/
+
             res = stringRandom(1, {letters:false});
         }
 
