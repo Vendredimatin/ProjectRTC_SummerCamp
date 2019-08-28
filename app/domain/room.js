@@ -12,7 +12,7 @@ class Room {
     }
 
     createId(){
-        var str = '0123456789abcdefghjklmnpqrstuvwxyz';
+     //   var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = '';
 /*        let numStr = str.substr(0,10);
         let letterStr = str.substr(10);*/
@@ -37,7 +37,7 @@ class Room {
     }
 
     createCode(){
-        var str = '0123456789abcdefghjklmnpqrstuvwxyz';
+     //   var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = stringRandom(4);
         /*for(var i=0;i<4;i++){
             //随机产生字符串的下标
