@@ -45,3 +45,19 @@ var io = require('socket.io').listen(server);
 require('./app/socketHandler.js')(io, rooms);
 require('./app/controller/userController.js')(app,rooms);
 require('./app/controller/roomController.js')(app,rooms);
+
+
+var schedule = require("node-schedule");
+schedule.scheduleJob('0 0/3 * * *', function(){
+    let roomList = rooms.getRoomsList();
+    for (let roomId in roomList){
+        let room = roomList[roomId];
+        room.changeCode();
+        console.log(room.roomCode);
+    }
+    for (let i = 0; i < roomList.length; i++) {
+        let room = roomList[i];
+        room.changeCode();
+        console.log(room.roomCode);
+    }
+});

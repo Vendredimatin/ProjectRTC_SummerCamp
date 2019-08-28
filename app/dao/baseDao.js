@@ -12,49 +12,6 @@ function __connect(callback){
     })
 }
 
-function find(collection, obj, callback){
-    __connect(function (db, client) {
-        db.collection(collection).find(obj).toArray(function (err, result) {
-            callback(result);
-            //  client.close();
-        })
-    })
-}
-
-/*
-function demo(){
-    find('room',{username:'lhy'}, function (result) {
-        console.log(result)
-    });
-
-   /!* insertOne('user',{username:'zzh', password:123}, function(result){
-        console.log(result['result']['ok']);
-        });
-*!/
-}
-*/
-
-/*
-function findOne(collection, whereObj, callback) {
-    __connect(function (db) {
-        db.collection(collection).findOne(whereObj, function (err, result) {
-            console.log(result);
-            callback(result);
-        })
-    })
-}
-
-function insertOne(collection, obj, callback) {
-    __connect(function (db, client) {
-        db.collection(collection).insert(obj, function (err, result) {
-            console.log(result);
-            callback(result);
-            client.close();
-        })
-    });
-}*/
-
-//demo();
 
 module.exports = function () {
 

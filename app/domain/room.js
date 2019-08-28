@@ -13,7 +13,18 @@ class Room {
     createId(){
         var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = '';
-        for (let i = 0; i < 6; i++){
+        let numStr = str.substr(0,10);
+        let letterStr = str.substr(10);
+
+        if (this.roomType == 'monitor'){
+            let firstN = parseInt(Math.random() * numStr.length);
+            res += numStr[firstN];
+        }else {
+            let firstN = parseInt(Math.random() * letterStr.length);
+            res += letterStr[firstN];
+        }
+
+        for (let i = 0; i < 5; i++){
             var n=parseInt(Math.random()*str.length);
             res+=str[n];
         }
@@ -32,11 +43,11 @@ class Room {
     }
 
     changeCode(){
-        this.code = this.createCode();
+        this.roomCode = this.createCode();
     }
 
-    addStream(deviceId, deviceName){
-        let stream = new Stream(deviceId, deviceName);
+    addStream(deviceId, deviceName, mac){
+        let stream = new Stream(deviceId, deviceName, mac);
         this.streamList.push(stream);
     }
 

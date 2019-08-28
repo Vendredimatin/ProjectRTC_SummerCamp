@@ -22,13 +22,11 @@ module.exports = function(io, rooms) {
     // 监听消息，名字可以自命名，根据客户端的id和options的name闯将一个新流
     client.on('readyToStream', function(options) {
       console.log('-- ' + client.id + ' is ready to stream --');
-      console.log(options);
       let roomId = options.id;
       let roomCode = options.code;
       let deviceName = options.name;
       let deviceId = options.mac;
-      console.log(roomId,roomCode);
-      rooms.addStream(roomId,roomCode, client.id, options.name);
+      rooms.addStream(roomId,roomCode, client.id, deviceName, deviceId);
       //streams.addStream(client.id, options.name);
     });
     
