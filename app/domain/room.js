@@ -1,4 +1,5 @@
 let Stream = require('../domain/stream');
+const stringRandom = require('string-random');
 class Room {
     constructor(username, type, createTime, isDelete, streamList, roomCode, roomId){
         this.username = username;
@@ -13,32 +14,36 @@ class Room {
     createId(){
         var str = '0123456789abcdefghjklmnpqrstuvwxyz';
         var res = '';
-        let numStr = str.substr(0,10);
-        let letterStr = str.substr(10);
+/*        let numStr = str.substr(0,10);
+        let letterStr = str.substr(10);*/
 
         if (this.roomType == 'monitor'){
-            let firstN = parseInt(Math.random() * numStr.length);
-            res += numStr[firstN];
+            /*let firstN = parseInt(Math.random() * numStr.length);
+            res += numStr[firstN];*/
+            res = stringRandom(1, {numbers:false})
         }else {
-            let firstN = parseInt(Math.random() * letterStr.length);
-            res += letterStr[firstN];
+            /*let firstN = parseInt(Math.random() * letterStr.length);
+            res += letterStr[firstN];*/
+            res = stringRandom(1, {letters:false});
         }
 
-        for (let i = 0; i < 5; i++){
+        res += stringRandom(5)
+
+        /*for (let i = 0; i < 5; i++){
             var n=parseInt(Math.random()*str.length);
             res+=str[n];
-        }
+        }*/
         return res;
     }
 
     createCode(){
         var str = '0123456789abcdefghjklmnpqrstuvwxyz';
-        var res = '';
-        for(var i=0;i<4;i++){
+        var res = stringRandom(4);
+        /*for(var i=0;i<4;i++){
             //随机产生字符串的下标
             var n=parseInt(Math.random()*str.length);
             res+=str[n];
-        }
+        }*/
         return res;
     }
 
@@ -60,6 +65,6 @@ class Room {
         }
     }
 
-};
+}
 
 module.exports = Room;
